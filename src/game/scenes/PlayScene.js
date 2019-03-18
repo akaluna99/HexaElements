@@ -16,9 +16,10 @@ export default class PlayScene extends Scene {
     bomb.body.onWorldBounds = true; // enable worldbounds collision event
     bomb.setBounce(1);
     bomb.setVelocity(200, 20);
-
+	contadorText = this.add.text(10, 10, bomb.body.position.x, { font: '48px Arial', fill: '#000000' });
   }
 
   update () {
+	  contadorText.setText(bomb.body.position.x);
   }
 }
