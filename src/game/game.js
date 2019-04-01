@@ -6,16 +6,18 @@ import PlayScene from './scenes/PlayScene'
 function launch() {
     new Phaser.Game({
         type: Phaser.AUTO,
-        width: 800,
+        width: 600,
         height: 600,
+		//zoom: 4,
+		pixelArt: true,
         parent: 'game-container',
-        physics: {
+        /*physics: {
             default: 'arcade',
             arcade: {
                 gravity: {y: 300},
                 debug: false
             }
-        },
+        },*/
         scene: [BootScene, PlayScene]
     })
 }

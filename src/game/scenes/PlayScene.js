@@ -1,6 +1,12 @@
 import { Scene } from 'phaser';
 
-let bomb;
+let posX = 0
+let posY = 0
+let tamany = 10
+let tauler = [];
+let tiles;
+let layer;
+let map;
 
 export default class PlayScene extends Scene {
   constructor () {
@@ -9,24 +15,44 @@ export default class PlayScene extends Scene {
 
   create () {
     console.log("Starting PlayScene ...");
-    let i = this.add.image(400, 300, 'sky');
+    //let i = this.add.image(400, 300, 'tile_set');
+	 // Load a map from a 2D array of tile indices
 
-    bomb = this.physics.add.image(400, 200, 'bomb');
-    bomb.setCollideWorldBounds(true);
-    bomb.body.onWorldBounds = true; // enable worldbounds collision event
-    bomb.setBounce(1);
-    bomb.setVelocity(200, 20);
-	 //  By default the Signal is empty, so we create it here:
-    //bomb.body.onWorldBounds = new Phaser.Signal();
+	 let i;
+	 for ( i = 0; i < tamany; i ++){
+		 let j;
+		 tauler[i] = []
+		 for ( j = 0; j < tamany; j ++){
+			if (( j + i) % 2 == 0 ){
+				tauler[i].push(0);
+			}
+			else{
+				tauler[i].push(1);
+			}
+		 }
+	 }
+	//console.log(tauler)
 
-    //  And then listen for it
-	//bomb.body.onWorldBounds.add(hitWorldBounds, this);
-	//this.add.text(10, 10, bomb.body.position.x{ font: '48px Arial', fill: '#000000' });
-	console.log(this.physics.bomb); //.bomb.body.position.x
+	// When loading from an array, make sure to specify the tileWidth and tileHeight
+	map = this.make.tilemap({ data: tauler, tileWidth: 16, tileHeight: 16 });
+	tiles = map.addTilesetImage('tile_set');
+	layer = map.createStaticLayer(0, tiles);
   }
 
   update () {
-	 //console.log(bomb.body.onWorldBounds)
+	tauler[posX][posY] = 3;
+	posX += 1
+	if (posX == tamany){
+		posY += 1;
+		posX = 0;
+		if (posY == tamany){
+			posX = 0;
+			posY = 0;
+		}
+	}
+	map = this.make.tilemap({ data: tauler, tileWidth: 16, tileHeight: 16 });
+	tiles = map.addTilesetImage('tile_set');
+	layer = map.createStaticLayer(0, tiles);
   }
     
 }

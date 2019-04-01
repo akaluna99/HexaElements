@@ -2,6 +2,7 @@ import {Scene} from 'phaser'
 import sky from '@/game/assets/sky.png';
 import bomb from '@/game/assets/bomb.png';
 import boto from '@/game/assets/botoPlaceholder.png';
+import tile_set from '@/game/assets/tileset.png';
 
 export default class BootScene extends Scene {
     constructor() {
@@ -9,9 +10,10 @@ export default class BootScene extends Scene {
     }
 
     preload() {
-        this.load.image('sky', sky)
-        this.load.image('bomb', bomb)
-		this.load.image('boto', boto)
+        this.load.image('sky', sky);
+        this.load.image('bomb', bomb);
+		this.load.image('boto', boto);
+		this.load.image('tile_set', tile_set);
         // this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg'])
     }
 
