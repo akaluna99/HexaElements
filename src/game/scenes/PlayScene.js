@@ -7,6 +7,8 @@ let tauler = [];
 let tiles;
 let layer;
 let map;
+let dibuixa = 3
+let midaTile = 128
 
 export default class PlayScene extends Scene {
   constructor () {
@@ -24,33 +26,34 @@ export default class PlayScene extends Scene {
 		 tauler[i] = []
 		 for ( j = 0; j < tamany; j ++){
 			if (( j + i) % 2 == 0 ){
-				tauler[i].push(0);
+				tauler[i].push(2);
 			}
 			else{
-				tauler[i].push(1);
+				tauler[i].push(2);
 			}
 		 }
 	 }
 	//console.log(tauler)
 
 	// When loading from an array, make sure to specify the tileWidth and tileHeight
-	map = this.make.tilemap({ data: tauler, tileWidth: 16, tileHeight: 16 });
+	map = this.make.tilemap({ data: tauler, tileWidth: midaTile, tileHeight: midaTile });
 	tiles = map.addTilesetImage('tile_set');
 	layer = map.createStaticLayer(0, tiles);
   }
 
   update () {
-	tauler[posX][posY] = 3;
-	posX += 1
+	//tauler[posX][posY] = dibuixa;
+	//posX += 1
 	if (posX == tamany){
 		posY += 1;
 		posX = 0;
 		if (posY == tamany){
-			posX = 0;
-			posY = 0;
+			posX = dibuixa;
+			posY = dibuixa;
+			dibuixa += 1
 		}
 	}
-	map = this.make.tilemap({ data: tauler, tileWidth: 16, tileHeight: 16 });
+	map = this.make.tilemap({ data: tauler, tileWidth: midaTile, tileHeight: midaTile });
 	tiles = map.addTilesetImage('tile_set');
 	layer = map.createStaticLayer(0, tiles);
   }
