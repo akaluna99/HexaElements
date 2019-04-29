@@ -1,14 +1,18 @@
 import { Scene } from 'phaser';
 
-let posX = 0
-let posY = 0
+let fitxes = []; 
 let tamany = 10
+let taulerAmplada = 15
+let taulerAlcada = 9
 let tauler = [];
 let tiles;
 let layer;
 let map;
+
+let fitxesTiles;
+let fitxesMap;
 let dibuixa = 3
-let midaTile = 128
+let midaTile = 64
 
 export default class PlayScene extends Scene {
   constructor () {
@@ -21,41 +25,44 @@ export default class PlayScene extends Scene {
 	 // Load a map from a 2D array of tile indices
 
 	 let i;
-	 for ( i = 0; i < tamany; i ++){
+	 for ( i = 0; i < taulerAlcada; i ++){
 		 let j;
 		 tauler[i] = []
-		 for ( j = 0; j < tamany; j ++){
-			if (( j + i) % 2 == 0 ){
-				tauler[i].push(2);
-			}
-			else{
-				tauler[i].push(2);
+		 fitxes[i] = []
+		 for ( j = 0; j < taulerAmplada; j ++){
+			tauler[i].push(Phaser.Math.Between(0, 3));
+			fitxes[i].push(-1);
+			if ( i == 0 || i == taulerAlcada - 1){
+				tauler[i][j] = 5;
 			}
 		 }
 	 }
+	 tauler[0][0] = 4;
+	 tauler[0][taulerAmplada - 1] = 4;
+	 tauler[taulerAlcada - 1][0] = 4;
+	 tauler[taulerAlcada - 1][taulerAmplada - 1] = 4;
+	 
+	 fitxes[0][0] = 0;
+	 fitxes[0][taulerAmplada - 1] = 1;
+	 fitxes[taulerAlcada - 1][0] = 2;
+	 fitxes[taulerAlcada - 1][taulerAmplada - 1] = 3;
+	 
 	//console.log(tauler)
-
 	// When loading from an array, make sure to specify the tileWidth and tileHeight
 	map = this.make.tilemap({ data: tauler, tileWidth: midaTile, tileHeight: midaTile });
 	tiles = map.addTilesetImage('tile_set');
 	layer = map.createStaticLayer(0, tiles);
+	
+	fitxesMap = this.make.tilemap({data : fitxes, tileWidth: midaTile, tileHeight : midaTile});
+	fitxesTiles = fitxesMap.addTilesetImage('tile_fitxes');
+	layer = fitxesMap.createStaticLayer(0, fitxesTiles);
   }
 
   update () {
-	//tauler[posX][posY] = dibuixa;
-	//posX += 1
-	if (posX == tamany){
-		posY += 1;
-		posX = 0;
-		if (posY == tamany){
-			posX = dibuixa;
-			posY = dibuixa;
-			dibuixa += 1
-		}
-	}
+	/*
 	map = this.make.tilemap({ data: tauler, tileWidth: midaTile, tileHeight: midaTile });
 	tiles = map.addTilesetImage('tile_set');
-	layer = map.createStaticLayer(0, tiles);
+	layer = map.createStaticLayer(0, tiles);*/
   }
     
 }

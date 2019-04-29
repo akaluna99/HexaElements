@@ -3,6 +3,7 @@ import sky from '@/game/assets/sky.png';
 import bomb from '@/game/assets/bomb.png';
 import boto from '@/game/assets/botoPlaceholder.png';
 import tile_set from '@/game/assets/tileset.png';
+import tile_fitxes from '@/game/assets/tileset_fichas.png';
 
 export default class BootScene extends Scene {
     constructor() {
@@ -14,6 +15,7 @@ export default class BootScene extends Scene {
         this.load.image('bomb', bomb);
 		this.load.image('boto', boto);
 		this.load.image('tile_set', tile_set);
+		this.load.image('tile_fitxes', tile_fitxes);
         // this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg'])
     }
 
@@ -23,22 +25,16 @@ export default class BootScene extends Scene {
 		let th = this
 		
 		boto1.on('pointerdown', function (pointer) {
-			
 			this.setTint(0xff0000);
 			th.scene.start('PlayScene');
-
 		});
 
 		boto1.on('pointerout', function (pointer) {
-
 			this.clearTint();
-
 		});
 
 		boto1.on('pointerup', function (pointer) {
-
 			this.clearTint();
-
 		});
     }
 

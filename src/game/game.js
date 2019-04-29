@@ -6,9 +6,9 @@ import PlayScene from './scenes/PlayScene'
 function launch() {
     new Phaser.Game({
         type: Phaser.AUTO,
-        width: 600,
-        height: 600,
-		//zoom: 4,
+        width: 960,
+        height: 576,
+		//zoom: 0.4,
 		pixelArt: true,
         parent: 'game-container',
         /*physics: {
