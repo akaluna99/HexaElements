@@ -47,6 +47,20 @@ export default class PlayScene extends Scene {
   }
 
   create () {
+    //INICIALITZA VARIABLES
+    fitxesSprite = [];
+    fitxes = [];
+    taulaPuntuacio = [];
+    tauler = [];
+    nDau = 0;
+    casellaPosible = [];
+    cruzeta = [];
+    viu = []
+    jugadorAct = 0;
+    puntuacio = [];
+    potMoure = false;
+    overTirar = [];
+    fiJoc = false;
     console.log("Starting PlayScene ...");
     //let i = this.add.image(400, 300, 'tile_set');
 	 // Load a map from a 2D array of tile indices
@@ -117,7 +131,9 @@ export default class PlayScene extends Scene {
       if (!fiJoc){
         if (potMoure){
           if (pot_moure(fitxesSprite[jugadorAct].x, fitxesSprite[jugadorAct].y, pointer.x, pointer.y)){
-            console.log("HAURIA DE  MMOURE");
+          //if (true){
+            //game_end(1);
+            //console.log("HAURIA DE  MMOURE");
             mou(jugadorAct, pointer);
           }
         }
@@ -126,6 +142,7 @@ export default class PlayScene extends Scene {
         }
       }
       else {
+        fiJoc = true;
         th.scene.start('BootScene');
       }
     }, this);
@@ -267,13 +284,10 @@ export default class PlayScene extends Scene {
   }
 
   function mata(){
-    var text_mort = th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#000000' }).setOrigin(0.5));
-    text_mort.fontWeight = 'bold';
+    var text_mort = th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#D93025' }).setOrigin(0.5);
     //	Stroke color and thickness
-    text_mort.stroke = '#000000';
-    text_mort.strokeThickness = 6;
-    text_mort.fill = '#43d637';
-    text_mort.setDepth(6);
+    text_mort.setStroke('#000000', 20)
+    text_mort.setDepth(3);
     overTirar.push(text_mort);
 
     viu[jugadorAct] = false;
@@ -282,7 +296,6 @@ export default class PlayScene extends Scene {
     var ultim;
     for (var i = 0; i < viu.length; i++) {
       if (viu[i]){
-        console.log(nomJugadors[i]);
         ultim = i;
         vius += 1;
       }
@@ -298,10 +311,13 @@ export default class PlayScene extends Scene {
   function game_end(ultimViu){
     var pantallaEnd = [];
     var splash = th.add.image(0, 0, 'game_over').setOrigin(0);
-    splash.setDepth(2);
+    splash.setDepth(4);
     pantallaEnd.push(splash);
     pantallaEnd.push(th.add.text(width / 2, 243, "L'ultim jugador viu a sigut el " + nomJugadors[ultimViu], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
-    pantallaEnd[1].setDepth(3);
+    pantallaEnd[1].setDepth(4);
+    for (var i = 0; i < nJugadors; i++) {
+      mostra_resultat(i);
+    }
     fiJoc = true;
   }
 
@@ -342,4 +358,14 @@ export default class PlayScene extends Scene {
       mata();
     }*/
     //console.log(puntuacio[jugadorAct]);
+  }
+
+  function mostra_resultat(jugador){
+    var posX = 189;
+    var posY = 398;
+    var offsetX = 289;
+    var offsetY = 36;
+    th.add.text(posX, posY + (jugador * offsetY), nomJugadors[jugador], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5).setDepth(5);
+    th.add.text(posX + offsetX , posY + (jugador * offsetY), puntuacio[jugador], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5).setDepth(5);
+    th.add.text(posX + offsetX * 2,posY + (jugador * offsetY), "0", { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5).setDepth(5);
   }

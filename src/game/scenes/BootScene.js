@@ -40,12 +40,19 @@ export default class BootScene extends Scene {
     this.add.image(0, 0, 'fondo').setOrigin(0);
     var height = 576;
     var width = 960;
+    var first = true;
 		let boto1 = this.add.sprite(960 / 2, 576 / 2, 'boton_jugar').setInteractive();
     boto1.setScale(0.5);
 		let th = this;
 
 		boto1.on('pointerdown', function (pointer) {
+      if (!first){
+        var escenaJoc = th.scene.get('PlayScene');
+        escenaJoc.destroy();
+        escenaJoc.restart();﻿
+      }
 			th.scene.start('PlayScene');
+      first = false;
 		});
 
 		boto1.on('pointerout', function (pointer) {
