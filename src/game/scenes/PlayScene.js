@@ -127,7 +127,6 @@ export default class PlayScene extends Scene {
   }
   mostra_dau();
   this.input.on('pointerdown', function (pointer) {
-    console.log("CLICKAKKA");
       if (!fiJoc){
         if (potMoure){
           if (pot_moure(fitxesSprite[jugadorAct].x, fitxesSprite[jugadorAct].y, pointer.x, pointer.y)){
@@ -258,7 +257,7 @@ export default class PlayScene extends Scene {
     }
     potMoure = false;
     overTirar.push(th.add.image(0, 0, 'over_dau').setOrigin(0).setDepth(2));
-    var text = "Turn del jugador " + element[jugadorAct];
+    var text = "Torn del jugador " + element[jugadorAct];
     overTirar.push(th.add.text(width / 2, 100, text, { fontFamily: 'Arial', fontSize: 45, color: '#ffffff' }).setOrigin(0.5).setDepth(3));
   }
 
@@ -284,7 +283,7 @@ export default class PlayScene extends Scene {
   }
 
   function mata(){
-    var text_mort = th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#D93025' }).setOrigin(0.5);
+    var text_mort = th.add.text(width / 2, height / 2, "Has mort, Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#D93025' }).setOrigin(0.5);
     //	Stroke color and thickness
     text_mort.setStroke('#000000', 20)
     text_mort.setDepth(3);
@@ -313,7 +312,7 @@ export default class PlayScene extends Scene {
     var splash = th.add.image(0, 0, 'game_over').setOrigin(0);
     splash.setDepth(4);
     pantallaEnd.push(splash);
-    pantallaEnd.push(th.add.text(width / 2, 243, "L'ultim jugador viu a sigut el " + nomJugadors[ultimViu], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
+    pantallaEnd.push(th.add.text(width / 2, 243, "L'últim jugador viu ha sigut el " + nomJugadors[ultimViu], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
     pantallaEnd[1].setDepth(4);
     for (var i = 0; i < nJugadors; i++) {
       mostra_resultat(i);
