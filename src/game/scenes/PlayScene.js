@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 let height = 576;
 let width = 960;
-let nomJugadors = ["GROC", "BLAU", "VERMELL", "VERD"];
+let nomJugadors = ["TERRA", "AIGUA", "AIRE", "FOC"];
 //TAULA DANY Jugador amb (terra, aigua, aire, foc)
 let taula_dany = [[0, 5, -5, 1], //Jugador Terra
                   [-5, 0, 1, 5], //Jugador Aigua
@@ -16,6 +16,7 @@ let th;
 let nJugadors = 4;
 let fitxesSprite = [];
 let fitxes = [];
+let taulaPuntuacio = [];
 let taulerAmplada = 15
 let taulerAlcada = 9
 let tauler = [];
@@ -92,6 +93,7 @@ export default class PlayScene extends Scene {
     switch (i) {
       case 0:
         in_jugador(midaTile, midaTile, 'fitxa_g');
+        taulaPuntuacio.push(this.add.text(midaTile, 5, "Punts : " + String(puntuacio[0]), { fontSize: '32px', fill: '#000' });)
         break;
       case 1:
         in_jugador(taulerAmplada * midaTile, midaTile, 'fitxa_b');
@@ -222,7 +224,7 @@ export default class PlayScene extends Scene {
     potMoure = false;
     overTirar.push(th.add.image(0, 0, 'over_dau').setOrigin(0).setDepth(2));
     var text = "Turn del jugador " + element[jugadorAct];
-    overTirar.push(th.add.text(width / 2, 100, text, { fontFamily: 'Arial', fontSize: 64, color: '#ffffff' }).setOrigin(0.5).setDepth(3));
+    overTirar.push(th.add.text(width / 2, 100, text, { fontFamily: 'Arial', fontSize: 45, color: '#ffffff' }).setOrigin(0.5).setDepth(3));
   }
 
   function tira_dau(numIteracio = 0){
@@ -246,7 +248,7 @@ export default class PlayScene extends Scene {
   }
 
   function mata(){
-    overTirar.push(th.add.text(width / 2, height / 2, "TAS MUERTO Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#000000' }).setOrigin(0.5));
+    overTirar.push(th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#000000' }).setOrigin(0.5));
     viu[jugadorAct] = false;
     potMoure = false;
     var vius = 0;
