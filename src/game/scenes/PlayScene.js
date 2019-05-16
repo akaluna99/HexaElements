@@ -3,10 +3,10 @@ let height = 576;
 let width = 960;
 let nomJugadors = ["TERRA", "AIGUA", "AIRE", "FOC"];
 //TAULA DANY Jugador amb (terra, aigua, aire, foc)
-let taula_dany = [[0, 5, -5, 1], //Jugador Terra
-                  [-5, 0, 1, 5], //Jugador Aigua
-                  [5, 1, 0, -5], //Jugador Aire
-                  [1, -5, 5, 0]];  //Jugador Foc
+let taula_dany = [[1, 5, -2, 1], //Jugador Terra
+                  [-2, 1, 1, 5], //Jugador Aigua
+                  [5, 1, 1, -2], //Jugador Aire
+                  [1, -2, 5, 1]];  //Jugador Foc
 let TERRA = 0;
 let AIGUA = 1;
 let AIRE = 2;
@@ -23,6 +23,7 @@ let tauler = [];
 let tiles;
 let layer;
 let map;
+let nDau = 0;
 
 let casellaPosible = [];
 let cruzeta = [];
@@ -33,6 +34,7 @@ let jugadorAct = 0;
 let puntuacio = [];
 let potMoure = false;
 let overTirar = [];
+let fiJoc = false;
 
 function coordenades(x, y) {
     this.x = x;
@@ -92,30 +94,39 @@ export default class PlayScene extends Scene {
     var nouSprite;
     switch (i) {
       case 0:
-        in_jugador(midaTile, midaTile, 'fitxa_g');
-        taulaPuntuacio.push(this.add.text(midaTile, 5, "Punts : " + String(puntuacio[0]), { fontSize: '32px', fill: '#000' });)
+        in_jugador(midaTile, midaTile, 'fitxa_g', 0);
+        taulaPuntuacio.push(this.add.text(midaTile, midaTile/2, "Punts: " + String(puntuacio[0]), { fontSize: '32px', fill: '#000' }));
         break;
       case 1:
-        in_jugador(taulerAmplada * midaTile, midaTile, 'fitxa_b');
+        in_jugador(taulerAmplada * midaTile, midaTile, 'fitxa_b', 1);
+        taulaPuntuacio.push(this.add.text(taulerAmplada * midaTile - midaTile * 4, midaTile/2, "Punts: " + String(puntuacio[1]), { fontSize: '32px', fill: '#000' }))
         break;
       case 2:
-        in_jugador(midaTile, taulerAlcada * midaTile, 'fitxa_y');
+        in_jugador(midaTile, taulerAlcada * midaTile, 'fitxa_y', 2);
+        taulaPuntuacio.push(this.add.text(midaTile, taulerAlcada * midaTile - midaTile /2, "Punts: " + String(puntuacio[2]), { fontSize: '32px', fill: '#000' }))
         break;
       case 3:
-        in_jugador(taulerAmplada * midaTile, taulerAlcada * midaTile, 'fitxa_r');
+        in_jugador(taulerAmplada * midaTile, taulerAlcada * midaTile, 'fitxa_r', 3);
+        taulaPuntuacio.push(this.add.text(taulerAmplada * midaTile - midaTile * 4, taulerAlcada * midaTile - midaTile / 2, "Punts: " + String(puntuacio[3]), { fontSize: '32px', fill: '#000' }))
         break;
     }
   }
-  var nDau;
   mostra_dau();
   this.input.on('pointerdown', function (pointer) {
-      if (potMoure){
-        if (pot_moure(fitxesSprite[jugadorAct].x, fitxesSprite[jugadorAct].y, pointer.x, pointer.y, nDau)){
-          mou(jugadorAct, pointer);
+    console.log("CLICKAKKA");
+      if (!fiJoc){
+        if (potMoure){
+          if (pot_moure(fitxesSprite[jugadorAct].x, fitxesSprite[jugadorAct].y, pointer.x, pointer.y)){
+            console.log("HAURIA DE  MMOURE");
+            mou(jugadorAct, pointer);
+          }
+        }
+        else{
+          tira_dau();
         }
       }
-      else{
-        nDau = tira_dau();
+      else {
+        th.scene.start('BootScene');
       }
     }, this);
   }
@@ -126,8 +137,14 @@ export default class PlayScene extends Scene {
 
 }
 
-  function in_jugador(posX, posY, tipus){
+  function in_jugador(posX, posY, tipus, nJugador = 0){
     var nouSprite = th.add.image(posX, posY, tipus);
+    if (nJugador % 2 == 0){
+      th.add.text(posX, posY - midaTile, element[nJugador], { fontSize: '32px', fill: '#000' });
+    }
+    else{
+      th.add.text(posX - midaTile * 4, posY - midaTile, element[nJugador], { fontSize: '32px', fill: '#000' });
+    }
     nouSprite.setScale(.25);
     nouSprite.setOrigin(1);
     fitxesSprite.push(nouSprite);
@@ -199,6 +216,7 @@ export default class PlayScene extends Scene {
       dibuixa_overlay(casellaX + (midaTile * numDau), casellaY, numDau);
       posible = true;
     }
+    nDau = numDau;
     if (!posible) {
       tira_dau(numIteracio + 1);
     }
@@ -235,7 +253,7 @@ export default class PlayScene extends Scene {
     for (var i = 0; i < overTirar.length; i++) {
       overTirar[i].destroy();
     }
-    var text = "Et pots moure " + String(numDau) + " caselles";
+    var text = String(element[jugadorAct]) + " pot moure " + String(numDau) + " caselles";
     overTirar.push(th.add.text(width / 2, midaTile / 2, text, { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
     potMoure = true;
     if (numIteracio == 7){
@@ -243,17 +261,25 @@ export default class PlayScene extends Scene {
     }
     else{
       marca_posible(fitxesSprite[jugadorAct].x, fitxesSprite[jugadorAct].y, numDau, numIteracio);
-      return numDau;
+      //nDau = numDau;
     }
+    return numDau;
   }
 
   function mata(){
-    overTirar.push(th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#000000' }).setOrigin(0.5));
+    var text_mort = th.add.text(width / 2, height / 2, "Has Mort Jugador " + nomJugadors[jugadorAct], { fontFamily: 'Arial', fontSize: 50, color: '#000000' }).setOrigin(0.5));
+    text_mort.fontWeight = 'bold';
+    //	Stroke color and thickness
+    text_mort.stroke = '#000000';
+    text_mort.strokeThickness = 6;
+    text_mort.fill = '#43d637';
+    text_mort.setDepth(6);
+    overTirar.push(text_mort);
+
     viu[jugadorAct] = false;
     potMoure = false;
     var vius = 0;
     var ultim;
-    console.log("SIGUEN VISU");
     for (var i = 0; i < viu.length; i++) {
       if (viu[i]){
         console.log(nomJugadors[i]);
@@ -274,36 +300,46 @@ export default class PlayScene extends Scene {
     var splash = th.add.image(0, 0, 'game_over').setOrigin(0);
     splash.setDepth(2);
     pantallaEnd.push(splash);
-    pantallaEnd.push(th.add.text(width / 2, 243, "Ha guanyat " + nomJugadors[ultimViu], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
+    pantallaEnd.push(th.add.text(width / 2, 243, "L'ultim jugador viu a sigut el " + nomJugadors[ultimViu], { fontFamily: 'Arial', fontSize: 20, color: '#000000' }).setOrigin(0.5));
     pantallaEnd[1].setDepth(3);
+    fiJoc = true;
   }
 
-  function pot_moure(posXraw, posYraw, posClickXraw, posClickYraw, numDau){
+  function pot_moure(posXraw, posYraw, posClickXraw, posClickYraw){
+    var numDau = nDau;
     var posClickX = (Math.floor(posClickXraw / midaTile) + 1);
     var posClickY = (Math.floor(posClickYraw / midaTile) + 1);
     var posX = (Math.floor(posXraw / midaTile));
     var posY = (Math.floor(posYraw / midaTile));
+    console.log("CLICK " + String(posClickX) + " " + String(posClickY));
+    console.log("CASELLA " + String(posX) + " " + String(posY));
+    console.log("DAU " + String(nDau));
     var pot = false;
     if (posX + numDau == posClickX && posY == posClickY){
       pot = true;
     }
-    if (posX - numDau == posClickX && posY == posClickY){
+    else if (posX - numDau == posClickX && posY == posClickY){
       pot = true;
     }
-    if (posX == posClickX && posY + numDau == posClickY){
+    else if (posX == posClickX && posY + numDau == posClickY){
       pot = true;
     }
-    if (posX == posClickX && posY - numDau == posClickY){
+    else if (posX == posClickX && posY - numDau == posClickY){
       pot = true;
     }
+    console.log(pot);
     return pot;
   }
 
   function calcula_dany(posX, posY){
-    console.log(posY);
-    console.log(posX);
+    //console.log(posY);
+    //console.log(posX);
     var casellaTauler = tauler[posY - 1][posX - 1];
-    console.log(element[casellaTauler]);
+    //console.log(element[casellaTauler]);
     puntuacio[jugadorAct] += taula_dany[jugadorAct][casellaTauler];
-    console.log(puntuacio[jugadorAct]);
+    taulaPuntuacio[jugadorAct].setText("Punts: " + String(puntuacio[jugadorAct]));
+    /*if (puntuacio[jugadorAct] < 0){
+      mata();
+    }*/
+    //console.log(puntuacio[jugadorAct]);
   }

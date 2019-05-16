@@ -7,8 +7,8 @@ function launch() {
         type: Phaser.AUTO,
         width: 960,
         height: 576,
-		//zoom: 0.4,
-		    pixelArt: true,
+		    zoom: 1,
+		    //pixelArt: true,
         parent: 'game-container',
         /*physics: {
             default: 'arcade',
