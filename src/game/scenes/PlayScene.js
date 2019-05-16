@@ -2,10 +2,16 @@ import { Scene } from 'phaser';
 let height = 576;
 let width = 960;
 let nomJugadors = ["GROC", "BLAU", "VERMELL", "VERD"];
+//TAULA DANY Jugador amb (terra, aigua, aire, foc)
+let taula_dany = [[0, 5, -5, 1], //Jugador Terra
+                  [-5, 0, 1, 5], //Jugador Aigua
+                  [5, 1, 0, -5], //Jugador Aire
+                  [1, -5, 5, 0]];  //Jugador Foc
 let TERRA = 0;
 let AIGUA = 1;
 let AIRE = 2;
 let FOC = 3;
+let element = ["TERRA", "AIGUA", "AIRE", "FOC"];
 let th;
 let nJugadors = 4;
 let fitxesSprite = [];
@@ -85,16 +91,16 @@ export default class PlayScene extends Scene {
     var nouSprite;
     switch (i) {
       case 0:
-        in_jugador(midaTile, midaTile, 'fitxa_y');
+        in_jugador(midaTile, midaTile, 'fitxa_g');
         break;
       case 1:
         in_jugador(taulerAmplada * midaTile, midaTile, 'fitxa_b');
         break;
       case 2:
-        in_jugador(midaTile, taulerAlcada * midaTile, 'fitxa_r');
+        in_jugador(midaTile, taulerAlcada * midaTile, 'fitxa_y');
         break;
       case 3:
-        in_jugador(taulerAmplada * midaTile, taulerAlcada * midaTile, 'fitxa_g');
+        in_jugador(taulerAmplada * midaTile, taulerAlcada * midaTile, 'fitxa_r');
         break;
     }
   }
@@ -135,7 +141,7 @@ export default class PlayScene extends Scene {
         jugadorAct = 0;
       }
     }
-    console.log("JUGADRO ACTUAL " + String(jugadorAct));
+    console.log("JUGADRO ACTUAL " + element[jugadorAct]);
   }
 
   function mou (jugador, posicio) {
@@ -145,6 +151,7 @@ export default class PlayScene extends Scene {
     if ( casellaPosible[nouPosX][nouPosY] ) {
       casellaPosible[nouPosX][nouPosY] = false;
       flip_casella(nouPosX * midaTile, nouPosY * midaTile);
+      calcula_dany(nouPosX, nouPosY);
       spriteMoure.x = nouPosX * midaTile;
       spriteMoure.y = nouPosY * midaTile;
       spriteMoure.setDepth(1);
@@ -214,7 +221,7 @@ export default class PlayScene extends Scene {
     }
     potMoure = false;
     overTirar.push(th.add.image(0, 0, 'over_dau').setOrigin(0).setDepth(2));
-    var text = "Turn del jugador " + nomJugadors[jugadorAct];
+    var text = "Turn del jugador " + element[jugadorAct];
     overTirar.push(th.add.text(width / 2, 100, text, { fontFamily: 'Arial', fontSize: 64, color: '#ffffff' }).setOrigin(0.5).setDepth(3));
   }
 
@@ -274,10 +281,6 @@ export default class PlayScene extends Scene {
     var posClickY = (Math.floor(posClickYraw / midaTile) + 1);
     var posX = (Math.floor(posXraw / midaTile));
     var posY = (Math.floor(posYraw / midaTile));
-    console.log(posClickY);
-    console.log(posClickX);
-    console.log(posY);
-    console.log(posX);
     var pot = false;
     if (posX + numDau == posClickX && posY == posClickY){
       pot = true;
@@ -292,4 +295,13 @@ export default class PlayScene extends Scene {
       pot = true;
     }
     return pot;
+  }
+
+  function calcula_dany(posX, posY){
+    console.log(posY);
+    console.log(posX);
+    var casellaTauler = tauler[posY - 1][posX - 1];
+    console.log(element[casellaTauler]);
+    puntuacio[jugadorAct] += taula_dany[jugadorAct][casellaTauler];
+    console.log(puntuacio[jugadorAct]);
   }
