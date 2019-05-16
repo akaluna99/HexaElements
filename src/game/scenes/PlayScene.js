@@ -3,10 +3,10 @@ let height = 576;
 let width = 960;
 let nomJugadors = ["TERRA", "AIGUA", "AIRE", "FOC"];
 //TAULA DANY Jugador amb (terra, aigua, aire, foc)
-let taula_dany = [[1, 5, -2, 1], //Jugador Terra
-                  [-2, 1, 1, 5], //Jugador Aigua
-                  [5, 1, 1, -2], //Jugador Aire
-                  [1, -2, 5, 1]];  //Jugador Foc
+let taula_dany = [[2, 5, -2, 1], //Jugador Terra
+                  [-2, 2, 1, 5], //Jugador Aigua
+                  [5, 1, 2, -2], //Jugador Aire
+                  [1, -2, 5, 2]];  //Jugador Foc
 let TERRA = 0;
 let AIGUA = 1;
 let AIRE = 2;
